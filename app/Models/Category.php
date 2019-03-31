@@ -32,11 +32,13 @@ class Category extends Model
     	});
     }
 
+    //获取父类目
     public function parent()
     {
     	return $this->belongsTo(Category::class);
     }
 
+    //获取子类目
     public function children()
     {
     	return $this->hasMany(Category::class,'parent_id');
@@ -73,7 +75,7 @@ class Category extends Model
     {
     	return $this->ancestors //获取所有祖先类目
     				->pluck('name') //取出所有祖先类目的name字段作为一个数组
-    				->push($this->name) //// 将当前类目的 name 字段值加到数组的末尾
+    				->push($this->name) // 将当前类目的 name 字段值加到数组的末尾
     				->implode(' - '); // 用 - 符号将数组的值组装成一个字符串
     }
 }
