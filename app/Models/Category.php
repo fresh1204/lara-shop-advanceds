@@ -52,7 +52,7 @@ class Category extends Model
 
     //定义一个访问器，获取所有祖先类目的ID值
     public function getPathIdsAttribute()
-    {
+    {	
     	//trim($str,'-')    将字符串两端的-符合去除
     	//array_filter($arr)将数组中的空值移除
     	$arr = explode('-', trim($this->path,'-'));
@@ -72,7 +72,7 @@ class Category extends Model
 
     //定义一个访问器，获取以-为分割的所有祖先类目名称以及当前类目名称
     public function getFullNameAttribute()
-    {
+    {	//echo '<pre>';print_r($this->ancestors->pluck('name')->toArray());echo $this->name;exit;
     	return $this->ancestors //获取所有祖先类目
     				->pluck('name') //取出所有祖先类目的name字段作为一个数组
     				->push($this->name) // 将当前类目的 name 字段值加到数组的末尾
