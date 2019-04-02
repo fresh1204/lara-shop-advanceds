@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Exceptions\InvalidRequestException;
 use App\Exceptions\InternalException;
 use App\Models\OrderItem;
+use App\Models\Category;
 
 class ProductsController extends Controller
 {
@@ -32,6 +33,23 @@ class ProductsController extends Controller
     		});
     	}
 
+        // 如果有传入category_id字段
+        $category_id = $request->input('category_id');
+        if($category_id && $category = Category::find($category_id)){
+
+            // 如果这是一个父类目
+            if($category->is_directory){
+                // 筛选出该父类目下所有子类目的商品
+                //whereHas()方法是基于关联关系去过滤模型的查询结果,他允许你自己添加对这个模型的过滤条件
+                $builder->whereHas('category',function($query) use ($category){
+                    $query->where('path','like',$category->path.$category->id.'-%');
+                });
+            }else{
+                // 筛选此类目下的商品
+                $builder->where('category_id',$category->id);
+            }
+        }
+
     	// 是否有提交 order 参数，如果有就赋值给 $order 变量
         // order 参数用来控制商品的排序规则
     	if($order = $request->input('order','')){
@@ -52,7 +70,8 @@ class ProductsController extends Controller
     		'filters' => [
     			'search' => $search,
     			'order' => $order,
-    		]
+    		],
+            'category' => $category ?? null,
     	]);
     }
 

@@ -67,7 +67,7 @@ class ProductsController extends Controller
 
         // 使用 with 来预加载商品类目数据，减少SQL查询
         $grid->model()->with(['category']);
-
+        //echo '<pre>';print_r($grid->model()->with(['category'])->toArray());exit;
         $grid->id('ID')->sortable();
         $grid->title('商品名称');
         // Laravel-Admin 支持用符号 . 来展示关联关系的字段
@@ -94,7 +94,7 @@ class ProductsController extends Controller
                 $batch->disableDelete();
             });
         });
-
+        
         return $grid;
     }
 
