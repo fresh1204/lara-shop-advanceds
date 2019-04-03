@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\CategoryService;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Exceptions\InvalidRequestException;
@@ -12,7 +13,7 @@ use App\Models\Category;
 class ProductsController extends Controller
 {
     //商品首页
-    public function index(Request $request)
+    public function index(Request $request,CategoryService $categoryService)
     {
     	
     	//$products = Product::query()->where('on_sale',true)->paginate(16);
@@ -44,6 +45,7 @@ class ProductsController extends Controller
                 $builder->whereHas('category',function($query) use ($category){
                     $query->where('path','like',$category->path.$category->id.'-%');
                 });
+
             }else{
                 // 筛选此类目下的商品
                 $builder->where('category_id',$category->id);
@@ -72,6 +74,7 @@ class ProductsController extends Controller
     			'order' => $order,
     		],
             'category' => $category ?? null,
+            'categoryTree' => $categoryService->getCategoryTree(),
     	]);
     }
 
