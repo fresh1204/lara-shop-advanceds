@@ -74,7 +74,7 @@ class ProductsController extends Controller
     			'order' => $order,
     		],
             'category' => $category ?? null,
-            'categoryTree' => $categoryService->getCategoryTree(),
+            //'categoryTree' => $categoryService->getCategoryTree(),
     	]);
     }
 
